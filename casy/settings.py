@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -37,6 +38,10 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # Third-party apps
+    "django_celery_beat",
+    # Local apps
+    "conversation",
 ]
 
 MIDDLEWARE = [
@@ -121,3 +126,34 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Celery configuration (if you're using it)
+CELERY_BROKER_URL = "redis://localhost:6379/0"
+CELERY_RESULT_BACKEND = "redis://localhost:6379/0"
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"
+CELERY_TIMEZONE = "UTC"
+
+# Configure periodic tasks
+from celery.schedules import crontab
+
+CELERY_BEAT_SCHEDULE = {
+    "check-emails-every-5-minutes": {
+        "task": "conversation.tasks.check_for_new_emails",
+        "schedule": crontab(minute="*/5"),
+    },
+    "send-scheduled-emails-every-minute": {
+        "task": "conversation.tasks.send_scheduled_emails",
+        "schedule": crontab(minute="*"),
+    },
+    "send-followups-hourly": {
+        "task": "conversation.tasks.send_followup_emails",
+        "schedule": crontab(minute="0", hour="*"),
+    },
+}
+
+GMAIL_TOKEN = os.environ.get("GMAIL_TOKEN")
+GMAIL_REFRESH_TOKEN = os.environ.get("GMAIL_REFRESH_TOKEN")
+GMAIL_CLIENT_ID = os.environ.get("GMAIL_CLIENT_ID")
+GMAIL_CLIENT_SECRET = os.environ.get("GMAIL_CLIENT_SECRET")
