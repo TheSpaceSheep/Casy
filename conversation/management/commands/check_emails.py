@@ -13,6 +13,6 @@ class Command(BaseCommand):
         processor.process_new_emails()
 
         self.stdout.write("Sending scheduled responses...")
-        processor.send_scheduled_responses()
+        processor.send_scheduled_messages()
 
         self.stdout.write(self.style.SUCCESS("Email processing completed!"))
