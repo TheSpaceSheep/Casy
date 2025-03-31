@@ -2,3 +2,5 @@
 env
 *pycache*
 *db.sqlite3*
+credentials
+
