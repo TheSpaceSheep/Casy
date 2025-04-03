@@ -7,6 +7,7 @@ from .services.email_processor import EmailProcessor
 def check_for_new_emails():
     """Background task to check for and process new emails"""
     processor = EmailProcessor()
+    print("[DEBUG] Checking for new emails...")
     processor.process_new_emails()
 
 
@@ -14,4 +15,5 @@ def check_for_new_emails():
 def send_scheduled_emails():
     """Background task to send scheduled email responses"""
     processor = EmailProcessor()
-    processor.send_scheduled_responses()
+    print("[DEBUG] Sending scheduled responses...")
+    processor.send_scheduled_messages()

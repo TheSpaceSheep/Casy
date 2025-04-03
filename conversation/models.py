@@ -28,15 +28,19 @@ class Message(models.Model):
         ("DRAFT", "Draft"),
     ]
 
-    conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE)
+    conversation = models.ForeignKey(
+        Conversation, on_delete=models.CASCADE, related_name="messages"
+    )
     message_id = models.CharField(max_length=255, unique=True)
     message_type = models.CharField(max_length=10, choices=MESSAGE_TYPE_CHOICES)
     subject = models.CharField(max_length=512, blank=True)
     content = models.TextField()
-    timestamp = models.DateTimeField(auto_now_add=True)
+    sender = models.EmailField(blank=True, null=True)
+    receiver = models.EmailField(blank=True, null=True)
+    timestamp = models.DateTimeField(blank=True, null=True)
 
     def __str__(self):
-        return f"{self.message_type} - {self.subject[:30]}"
+        return f"timestamp:{self.timestamp}\nfrom:{self.sender}\nto:{self.receiver}\nsubject:{self.subject}\ncontent: {self.content}\n\n"
 
 
 class ScheduledMessage(models.Model):

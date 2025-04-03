@@ -139,21 +139,18 @@ CELERY_TIMEZONE = "UTC"
 from celery.schedules import crontab
 
 CELERY_BEAT_SCHEDULE = {
-    "check-emails-every-5-minutes": {
+    "check-emails-every-minutes": {
         "task": "conversation.tasks.check_for_new_emails",
-        "schedule": crontab(minute="*/5"),
+        "schedule": crontab(minute="*/2"),
     },
     "send-scheduled-emails-every-minute": {
         "task": "conversation.tasks.send_scheduled_emails",
-        "schedule": crontab(minute="*"),
-    },
-    "send-followups-hourly": {
-        "task": "conversation.tasks.send_followup_emails",
-        "schedule": crontab(minute="0", hour="*"),
+        "schedule": crontab(minute="*/2"),
     },
 }
 
-GMAIL_TOKEN = os.environ.get("GMAIL_TOKEN")
-GMAIL_REFRESH_TOKEN = os.environ.get("GMAIL_REFRESH_TOKEN")
-GMAIL_CLIENT_ID = os.environ.get("GMAIL_CLIENT_ID")
-GMAIL_CLIENT_SECRET = os.environ.get("GMAIL_CLIENT_SECRET")
+GMAIL_CREDENTIALS_PATH = BASE_DIR / "credentials" / "gmail_api_credentials.json"
+GMAIL_TOKEN_PATH = BASE_DIR / "credentials" / "gmail_api_token.json"
+GMAIL_REDIRECT_URI = os.environ.get("GMAIL_REDIRECT_URI", "http://localhost:8000/")
+
+OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY")
