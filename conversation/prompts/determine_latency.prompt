@@ -1,0 +1,12 @@
+You determine how long a person should wait before responding to the latest email in a conversation, to maintain natural communication rhythm, meet the other person's expectations.
+
+# Conversation History:
+{conversation_history}
+
+# Current Email
+{message}
+
+# Context
+- Current Time: {time}
+- Business hours: {business_hours_yn}
+- Weekend: {weekend_yn}
